@@ -1,0 +1,37 @@
+import RPi.GPIO as GPIO
+import time
+import random  # Used here to simulate sensor values
+
+# Pin configuration
+RAIN_SENSOR_PIN = 17  # GPIO pin for rain sensor
+RELAY_PIN = 27        # GPIO pin connected to relay module
+
+# Threshold to simulate rain detection
+RAIN_THRESHOLD = 500
+
+# Setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RELAY_PIN, GPIO.OUT)
+GPIO.output(RELAY_PIN, GPIO.LOW)  # Initially off
+
+try:
+    while True:
+        # Simulate analog rain sensor value
+        rain_value = random.randint(0, 1023)  # Use actual sensor reading in real application
+
+        print(f"Rain Sensor Value: {rain_value}")
+        
+        if rain_value < RAIN_THRESHOLD:
+            print("Rain Detected - Turning ON Wiper")
+            GPIO.output(RELAY_PIN, GPIO.HIGH)  # Relay ON
+        else:
+            print("No Rain - Turning OFF Wiper")
+            GPIO.output(RELAY_PIN, GPIO.LOW)   # Relay OFF
+
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("Exiting program")
+
+finally:
+    GPIO.cleanup()
